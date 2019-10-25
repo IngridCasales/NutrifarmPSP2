@@ -1,0 +1,10 @@
+
+Exportar tabla
+
+.mode insert <nombre_tabla>
+.out <nombre_tabla>.sql
+select * from <nombre_tabla>;
+
+Importar tablas
+
+.read <nombre_tabla>.sql
