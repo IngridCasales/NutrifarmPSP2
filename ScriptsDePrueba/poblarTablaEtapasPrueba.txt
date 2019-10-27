@@ -1,0 +1,7 @@
+insert into etapas (descrip,ganancia) 
+	values 
+		("Mantenimiento",0),
+		("Engorde",0),
+		("Lactante",0),
+		("Crecimiento",0),
+		("Gestacion",0);
