@@ -1,0 +1,4 @@
+Se agrego una nueva clase llamada animalDAOIMP con su interfaz, dentro de esta clase de implemento un método llamado obtener animales que de igual manera devuelve una lista de animales para ser visualizada en la interfaz gráfica.
+Aun no se podrá ver ningún animal hasta que la tabla de la base de datos este poblada. Ademas se creo otro método llamado asignar requerimientos el cual recibe un objeto tipo animal que ya tendrá tres atributos definidos que son la especie, peso y etapa para poder asignar los requerimientos a este mismo objeto mediante una consulta a la base de datos.
+Tambien se agrego un nuevo método de nombre balanceo en la clase mezcla, en este método se realizara el balanceo con los datos que ya estarán en la misma clase que son la lista de ingredientes, el animal y sus requerimientos. los resultados del balanceo se tendrán que ir asignando a la lista cantidadesIng.
+ 
