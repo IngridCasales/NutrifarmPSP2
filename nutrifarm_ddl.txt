@@ -1,0 +1,67 @@
+CREATE TABLE clasificaciones (
+    tipo   VARCHAR2(80) PRIMARY KEY UNIQUE NOT NULL
+);
+CREATE TABLE ingredientes (
+    num_ing              INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
+    nom_ing              VARCHAR2(100) UNIQUE NOT NULL,
+    mat_sec              DOUBLE NOT NULL,
+    pro_cru              DOUBLE NOT NULL,
+    fib_cru              DOUBLE NOT NULL,
+    ca                   DOUBLE NOT NULL,
+    p                    DOUBLE NOT NULL,
+    mg                   DOUBLE NOT NULL,
+    em                   DOUBLE NOT NULL,
+    tnd                  DOUBLE NOT NULL,
+    clasificacion_tipo   VARCHAR2(80) NOT NULL,
+    FOREIGN KEY(clasificacion_tipo) REFERENCES clasificaciones(tipo) ON DELETE RESTRICT
+);
+CREATE TABLE sqlite_sequence(name,seq);
+CREATE TABLE pesos (
+    kg   INTEGER PRIMARY KEY UNIQUE NOT NULL
+);
+CREATE TABLE etapas (
+    descrip   VARCHAR2(80) PRIMARY KEY UNIQUE NOT NULL,
+    ganancia  INTEGER NOT NULL
+);
+CREATE TABLE animales (
+    especie         VARCHAR2(80) NOT NULL,
+    en              DOUBLE NOT NULL,
+    em              DOUBLE NOT NULL,
+    ed              DOUBLE NOT NULL,
+    tnd             DOUBLE NOT NULL,
+    pro_cru         DOUBLE NOT NULL,
+    cal             DOUBLE NOT NULL,
+    fos             DOUBLE NOT NULL,
+    vit_a           DOUBLE NOT NULL,
+    peso_kg         INTEGER NOT NULL,
+    etapa_descrip   VARCHAR2(80) NOT NULL,
+    FOREIGN KEY(peso_kg) REFERENCES pesos(kg) ON DELETE RESTRICT,
+    FOREIGN KEY(etapa_descrip) REFERENCES etapas(descrip) ON DELETE RESTRICT,
+    PRIMARY KEY(especie,peso_kg,etapa_descrip)
+);
+CREATE TABLE mezclas (
+    num_mezcla       INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
+    fecha            TIMESTAMP NOT NULL,
+    nota             VARCHAR2(100) NOT NULL,
+    animal_especie   VARCHAR2(80) NOT NULL,
+    animal_kg        INTEGER NOT NULL,
+    animal_descrip   VARCHAR2(80) NOT NULL,
+    FOREIGN KEY(animal_especie) REFERENCES animales(especie) ON DELETE RESTRICT,
+    FOREIGN KEY(animal_kg) REFERENCES animales(peso_kg) ON DELETE RESTRICT,
+    FOREIGN KEY(animal_descrip) REFERENCES animales(etapa_descrip) ON DELETE RESTRICT
+);
+CREATE INDEX clasificaciones_tipo ON clasificaciones(tipo);
+CREATE INDEX ingredientes_num_ing ON ingredientes(num_ing);
+CREATE INDEX pesos_kg ON pesos(kg);
+CREATE INDEX etapas_descrip ON etapas(descrip);
+CREATE INDEX num_mezcla ON mezclas(num_mezcla);
+CREATE INDEX animales_inx ON animales(especie,peso_kg,etapa_descrip);
+CREATE TABLE cantidades (
+    num_seq      INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
+    porcent      DOUBLE NOT NULL,
+    num_mezcla   INTEGER NOT NULL,
+    num_ing      INTEGER NOT NULL,
+    FOREIGN KEY(num_mezcla) REFERENCES mezclas(num_mezcla) ON DELETE RESTRICT,
+    FOREIGN KEY(num_ing) REFERENCES ingredientes(num_ing) ON DELETE RESTRICT
+);
+CREATE INDEX cantidades_num_seq ON cantidades(num_seq);
