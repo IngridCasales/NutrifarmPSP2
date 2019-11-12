@@ -112,10 +112,9 @@ public class ConfirmaIngrediente extends JFrame {
       public void actionPerformed(ActionEvent e) {
         IngredienteDAOIMP baseDatos = new IngredienteDAOIMP();
         int i = baseDatos.insertar(nuevo);
-        if (i == 0) {
-          JOptionPane.showMessageDialog(null,"Error! * El Ingrediente No se pudo agregar-");
-        } else {
-          JOptionPane.showMessageDialog(null,"Ingrediente agrgado correctamente-");
+        if (i > 0) {
+          JOptionPane.showMessageDialog(null,"Ingrediente agregado correctamente-"
+        		  , "Agregar ingrediente", JOptionPane.PLAIN_MESSAGE);
         }
         dispose();
       }

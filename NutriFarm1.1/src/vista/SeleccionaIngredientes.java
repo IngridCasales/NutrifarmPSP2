@@ -84,7 +84,7 @@ public class SeleccionaIngredientes extends JPanel {
     add(lblIngrediente);
 
     comboBoxCla = new JComboBox<String>();
-    springLayout.putConstraint(SpringLayout.NORTH,comboBoxCla, 33,SpringLayout.SOUTH, lblSeleccionaLos);
+    springLayout.putConstraint(SpringLayout.NORTH,comboBoxCla,33,SpringLayout.SOUTH,lblSeleccionaLos);
     springLayout.putConstraint(SpringLayout.WEST,comboBoxCla, 162,SpringLayout.WEST, this);
     springLayout.putConstraint(SpringLayout.EAST,comboBoxCla, -49,SpringLayout.EAST, this);
     springLayout.putConstraint(SpringLayout.EAST,lblClasificacion,-23,SpringLayout.WEST,comboBoxCla);

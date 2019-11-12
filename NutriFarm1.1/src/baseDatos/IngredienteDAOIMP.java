@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
+import javax.swing.JOptionPane;
 import modelo.Ingrediente;
 
 public class IngredienteDAOIMP implements IngredienteDAO {
@@ -82,10 +82,19 @@ public class IngredienteDAOIMP implements IngredienteDAO {
       } else {
         conexion.rollback();
       }
-      ps.close();
-      conexion.close();
+      
     } catch (SQLException e) {
       e.printStackTrace();
+      JOptionPane.showMessageDialog(null, "Error!*Ingrediente No agregado",
+          "Error", JOptionPane.ERROR_MESSAGE);
+    } finally {
+    	try {
+			ps.close();
+			conexion.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
     return cont;
   }

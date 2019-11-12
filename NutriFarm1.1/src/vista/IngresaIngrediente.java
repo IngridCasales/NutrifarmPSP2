@@ -6,13 +6,19 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
+
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
+
+import baseDatos.ClasificacionDAOIMP;
+import modelo.Clasificacion;
 import modelo.Ingrediente;
 
 
@@ -22,7 +28,7 @@ public class IngresaIngrediente extends JPanel {
 
   private static final long serialVersionUID = 1L;
   private JTextField nombre;
-  private JTextField clasificacion;
+  private JComboBox<String> clasificacion;
   private JTextField matSec;
   private JTextField tnd;
   private JTextField proCru;
@@ -31,11 +37,13 @@ public class IngresaIngrediente extends JPanel {
   private JTextField p;
   private JTextField mg;
   private JTextField em;
+  private List<Clasificacion> clasi;
 
   /**
    * Constructor.
    */
   public IngresaIngrediente(CardLayout tarjetero, JPanel contenedor) {
+    
     setBackground(new Color(255, 192, 203));
     setBounds(100, 100, 330, 500);
     SpringLayout springLayout = new SpringLayout();
@@ -83,9 +91,14 @@ public class IngresaIngrediente extends JPanel {
     lblNewLabel.setHorizontalAlignment(SwingConstants.RIGHT);
     panel.add(lblNewLabel);
     
-    clasificacion = new JTextField();
+    clasificacion = new JComboBox<String>();
+    clasificacion.addItem("-");
+    ClasificacionDAOIMP cla = new ClasificacionDAOIMP();
+    clasi = cla.obtnenerClasificaciones();
+    for (int i = 0;i < clasi.size();i++) {
+      clasificacion.addItem(clasi.get(i).getTipo());
+    }
     panel.add(clasificacion);
-    clasificacion.setColumns(10);
     
     JLabel lblTnd = new JLabel("Tnd:  ");
     lblTnd.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -153,7 +166,7 @@ public class IngresaIngrediente extends JPanel {
     
     JButton btnRegresar = new JButton("Regresar");
     springLayout.putConstraint(SpringLayout.NORTH, btnRegresar, -59, SpringLayout.SOUTH, this);
-    springLayout.putConstraint(SpringLayout.WEST, btnRegresar, 0, SpringLayout.WEST, lblMezclaObtenida);
+    springLayout.putConstraint(SpringLayout.WEST,btnRegresar,0,SpringLayout.WEST,lblMezclaObtenida);
     springLayout.putConstraint(SpringLayout.SOUTH, btnRegresar, -23, SpringLayout.SOUTH, this);
     btnRegresar.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
@@ -163,12 +176,12 @@ public class IngresaIngrediente extends JPanel {
     add(btnRegresar);
     
     JButton btnAgregar = new JButton("Agregar");
-    springLayout.putConstraint(SpringLayout.NORTH, btnAgregar, 0, SpringLayout.NORTH, btnRegresar);
-    springLayout.putConstraint(SpringLayout.SOUTH, btnAgregar, -23, SpringLayout.SOUTH, this);
-    springLayout.putConstraint(SpringLayout.EAST, btnAgregar, 0, SpringLayout.EAST, lblMezclaObtenida);
+    springLayout.putConstraint(SpringLayout.NORTH,btnAgregar,0,SpringLayout.NORTH, btnRegresar);
+    springLayout.putConstraint(SpringLayout.SOUTH,btnAgregar,-23,SpringLayout.SOUTH, this);
+    springLayout.putConstraint(SpringLayout.EAST,btnAgregar,0,SpringLayout.EAST,lblMezclaObtenida);
     btnAgregar.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        if (nombre.getText().equals("") || clasificacion.getText().equals("")
+        if (nombre.getText().equals("") || clasificacion.getSelectedItem().equals("-")
             || ca.getText().equals("") || tnd.getText().equals("") 
             || em.getText().equals("") || fibCru.getText().equals("") 
             || matSec.getText().equals("") || p.getText().equals("") 
@@ -178,7 +191,7 @@ public class IngresaIngrediente extends JPanel {
           try {
             Ingrediente nuevo = new Ingrediente();
             nuevo.setNom_ing(nombre.getText());
-            nuevo.setClasificacion_tipo(clasificacion.getText());
+            nuevo.setClasificacion_tipo((String) clasificacion.getSelectedItem());
             nuevo.setCa(Double.parseDouble(ca.getText()));
             nuevo.setTnd(Double.parseDouble(tnd.getText()));
             nuevo.setPro_cru(Double.parseDouble(proCru.getText()));
