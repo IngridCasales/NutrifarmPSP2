@@ -17,6 +17,8 @@ public class Menu extends JPanel {
   private JPanel contentPane;
   private CardLayout tarjetero;
   private Mezcla concentrado;
+  private EligeAnimal eligeAnimal;
+  private IngresaIngrediente ingresaIngre;
   
   /**
    *@ Contructor: se recive como parametro el panel contendor y tarjetero
@@ -47,8 +49,11 @@ public class Menu extends JPanel {
     add(label1);
 
     JButton btnFormularMezcla = new JButton("Formular Mezcla");
+    btnFormularMezcla.setBackground(new Color(230, 230, 250));
     btnFormularMezcla.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
+        eligeAnimal = new EligeAnimal(tarjetero,contentPane);
+        contentPane.add(eligeAnimal,"eligeAnimal3");
         tarjetero.show(contentPane,"eligeAnimal3");
       }
     });
@@ -61,6 +66,7 @@ public class Menu extends JPanel {
     add(btnFormularMezcla);
 
     JButton btnMezclasPredefinidas = new JButton("Mezclas Predef.");
+    btnMezclasPredefinidas.setBackground(new Color(230, 230, 250));
     springLayout.putConstraint(SpringLayout.NORTH,btnMezclasPredefinidas,70,SpringLayout.SOUTH,
         label1);
     springLayout.putConstraint(SpringLayout.WEST,btnMezclasPredefinidas,176,SpringLayout.WEST,this);
@@ -68,16 +74,28 @@ public class Menu extends JPanel {
         this);
     springLayout.putConstraint(SpringLayout.EAST,btnMezclasPredefinidas,-22,SpringLayout.EAST,this);
     add(btnMezclasPredefinidas);
+    btnMezclasPredefinidas.setEnabled(false);
   
     JButton btnNewButton = new JButton("Historial\nMezclas");
+    btnNewButton.setBackground(new Color(230, 230, 250));
     springLayout.putConstraint(SpringLayout.NORTH, btnNewButton, 258, SpringLayout.NORTH, this);
     springLayout.putConstraint(SpringLayout.WEST, btnNewButton, 20, SpringLayout.WEST, this);
     springLayout.putConstraint(SpringLayout.SOUTH, btnNewButton, -161, SpringLayout.SOUTH, this);
     springLayout.putConstraint(SpringLayout.EAST,btnNewButton,0,SpringLayout.EAST,
         btnFormularMezcla);
     add(btnNewButton);
+    btnNewButton.setEnabled(false);
 
-    JButton btnAgregarIngre = new JButton("Agregar Ingre");
+    JButton btnAgregarIngre = new JButton("Agregar Ingrediente");
+    btnAgregarIngre.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        ingresaIngre = new IngresaIngrediente(tarjetero, contenedor);
+        contentPane.add(ingresaIngre,"ingresaIngre4");
+        tarjetero.show(contentPane,"ingresaIngre4");
+      }
+    });
+    springLayout.putConstraint(SpringLayout.EAST, btnAgregarIngre, 0, SpringLayout.EAST, btnMezclasPredefinidas);
+    btnAgregarIngre.setBackground(new Color(230, 230, 250));
     springLayout.putConstraint(SpringLayout.NORTH, btnAgregarIngre, 258, SpringLayout.NORTH, this);
     springLayout.putConstraint(SpringLayout.WEST,btnAgregarIngre,24,SpringLayout.EAST,btnNewButton);
     springLayout.putConstraint(SpringLayout.SOUTH,btnAgregarIngre,0,SpringLayout.SOUTH,
@@ -85,16 +103,20 @@ public class Menu extends JPanel {
     add(btnAgregarIngre);
 
     JButton btnReferencias = new JButton("Referencias");
+    btnReferencias.setBackground(new Color(230, 230, 250));
     springLayout.putConstraint(SpringLayout.WEST, btnReferencias, 0, SpringLayout.WEST,
         btnFormularMezcla);
     add(btnReferencias);
+    btnReferencias.setEnabled(false);
 
     JButton btnAcercaDe = new JButton("Acerca de...");
+    btnAcercaDe.setBackground(new Color(230, 230, 250));
     springLayout.putConstraint(SpringLayout.SOUTH,btnAcercaDe, -10, SpringLayout.SOUTH, this);
     springLayout.putConstraint(SpringLayout.NORTH,btnReferencias,0,SpringLayout.NORTH,btnAcercaDe);
     springLayout.putConstraint(SpringLayout.EAST,btnAcercaDe,0,SpringLayout.EAST,
         btnMezclasPredefinidas);
     add(btnAcercaDe);
+    btnAcercaDe.setEnabled(false);
   }
 
   public JPanel getContentPane() {

@@ -12,7 +12,6 @@ public class ContenedorPaneles extends JFrame {
   private CardLayout tarjetero;
   private Inicio inicio;
   private Menu menu;
-  private EligeAnimal eligeAnimal;
 
   /**
    *@ metodo principal Frame contenedor.
@@ -55,8 +54,6 @@ public class ContenedorPaneles extends JFrame {
     contentPane.add(inicio,"inicio1");
     menu = new Menu(tarjetero,contentPane);
     contentPane.add(menu,"menu2");
-    eligeAnimal = new EligeAnimal(tarjetero,contentPane);
-    contentPane.add(eligeAnimal,"eligeAnimal3");
   }
 
 }

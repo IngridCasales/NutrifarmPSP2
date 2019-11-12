@@ -15,7 +15,6 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTable;
 import javax.swing.SpringLayout;
 import modelo.Clasificacion;
 import modelo.Ingrediente;
@@ -30,8 +29,8 @@ public class SeleccionaIngredientes extends JPanel {
   private LinkedList<Ingrediente> ingSeleccionados;
   private JComboBox<String> comboBoxCla;
   private JComboBox<String> comboBoxIngrediente;
-  private JTable table;
   private List<Clasificacion> clasificaciones;
+  
   
   /**
    * Constructor.
@@ -102,8 +101,12 @@ public class SeleccionaIngredientes extends JPanel {
     comboBoxIngrediente.addItem("-");
     
     JButton btnAgregar = new JButton("Agregar");
-    springLayout.putConstraint(SpringLayout.NORTH, btnAgregar, 18, SpringLayout.SOUTH, comboBoxIngrediente);
-    springLayout.putConstraint(SpringLayout.WEST, btnAgregar, 0, SpringLayout.WEST, comboBoxCla);
+    springLayout.putConstraint(SpringLayout.NORTH, btnAgregar, 5, SpringLayout.SOUTH, comboBoxIngrediente);
+    springLayout.putConstraint(SpringLayout.WEST, btnAgregar, 127, SpringLayout.WEST, this);
+    springLayout.putConstraint(SpringLayout.SOUTH, btnAgregar, -271, SpringLayout.SOUTH, this);
+    springLayout.putConstraint(SpringLayout.EAST, btnAgregar, -124, SpringLayout.EAST, this);
+    btnAgregar.setIcon(null);
+    btnAgregar.setBackground(new Color(230, 230, 250));
     btnAgregar.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         if (comboBoxIngrediente.getSelectedItem().equals("-")
@@ -140,9 +143,12 @@ public class SeleccionaIngredientes extends JPanel {
     });
     add(btnAgregar);
 
-    JButton btnFormular = new JButton("Formular");
-    springLayout.putConstraint(SpringLayout.WEST, btnFormular, 106, SpringLayout.WEST, this);
-    springLayout.putConstraint(SpringLayout.SOUTH, btnFormular, -41, SpringLayout.SOUTH, this);
+    JButton btnFormular = new JButton("Siguiente");
+    springLayout.putConstraint(SpringLayout.WEST, btnFormular, 202, SpringLayout.WEST, this);
+    springLayout.putConstraint(SpringLayout.SOUTH, btnFormular, -21, SpringLayout.SOUTH, this);
+    springLayout.putConstraint(SpringLayout.EAST, btnFormular, 0, SpringLayout.EAST, comboBoxCla);
+    btnFormular.setIcon(null);
+    btnFormular.setBackground(new Color(230, 230, 250));
     btnFormular.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         if (ingSeleccionados.size() < 2) {
@@ -161,32 +167,31 @@ public class SeleccionaIngredientes extends JPanel {
       }
     });
     JLabel lblIngredietnes = new JLabel("* Ingredietnes *");
-    springLayout.putConstraint(SpringLayout.SOUTH, lblIngredietnes, -160, SpringLayout.NORTH, btnFormular);
+    springLayout.putConstraint(SpringLayout.SOUTH,lblIngredietnes,-160,SpringLayout.NORTH,btnFormular);
     add(btnFormular);
 
-    JButton btnBorrar = new JButton("Borrar");
-    btnBorrar.addActionListener(new ActionListener() {
+    panelTabla = new JPanel();
+    springLayout.putConstraint(SpringLayout.NORTH, panelTabla, 63, SpringLayout.SOUTH, comboBoxIngrediente);
+    springLayout.putConstraint(SpringLayout.SOUTH, panelTabla, -79, SpringLayout.SOUTH, this);
+    springLayout.putConstraint(SpringLayout.NORTH, btnFormular, 22, SpringLayout.SOUTH, panelTabla);
+    springLayout.putConstraint(SpringLayout.WEST, panelTabla, 22, SpringLayout.WEST, this);
+    springLayout.putConstraint(SpringLayout.EAST, panelTabla, -23, SpringLayout.EAST, this);
+    add(panelTabla);
+    
+    JButton btnNewButton = new JButton("Regresar");
+    springLayout.putConstraint(SpringLayout.WEST, btnNewButton, 50, SpringLayout.WEST, this);
+    springLayout.putConstraint(SpringLayout.EAST, btnNewButton, 0, SpringLayout.EAST, lblIngrediente);
+    btnNewButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        if (ingSeleccionados.size() == 0) {
-          JOptionPane.showMessageDialog(null,"Error! *No existen ingrdientes que borrar-");
-        } else {
-          ingSeleccionados.removeLast();
-          muestraTabla();
-        }
+        EligeAnimal eligeAnimal = new EligeAnimal(tarjetero,contentPane);
+        contentPane.add(eligeAnimal,"eligeAnimal3");
+        tarjetero.show(contentPane,"eligeAnimal3");
       }
     });
-    springLayout.putConstraint(SpringLayout.NORTH, btnBorrar, 0, SpringLayout.NORTH, btnAgregar);
-    springLayout.putConstraint(SpringLayout.WEST, btnBorrar,14,SpringLayout.WEST, lblClasificacion);
-    springLayout.putConstraint(SpringLayout.EAST, btnBorrar,0,SpringLayout.EAST, lblClasificacion);
-    add(btnBorrar);
-
-    panelTabla = new JPanel();
-    springLayout.putConstraint(SpringLayout.NORTH, panelTabla, 6, SpringLayout.SOUTH, btnAgregar);
-    springLayout.putConstraint(SpringLayout.WEST, panelTabla, 28, SpringLayout.WEST, this);
-    springLayout.putConstraint(SpringLayout.SOUTH, panelTabla, -6, SpringLayout.NORTH, btnFormular);
-    springLayout.putConstraint(SpringLayout.EAST, panelTabla, 302, SpringLayout.WEST, this);
-    add(panelTabla);
-    panelTabla.setLayout(new GridLayout(1, 1, 0, 0));
+    springLayout.putConstraint(SpringLayout.NORTH, btnNewButton, 22, SpringLayout.SOUTH,panelTabla);
+    springLayout.putConstraint(SpringLayout.SOUTH, btnNewButton, -21, SpringLayout.SOUTH, this);
+    btnNewButton.setIcon(null);
+    add(btnNewButton);
     agregaCla();
     muestraTabla();
   }
@@ -196,116 +201,14 @@ public class SeleccionaIngredientes extends JPanel {
    */
   public void muestraTabla() {
     panelTabla.removeAll();
-    int numeroIng = ingSeleccionados.size();
-    if (numeroIng == 0) {
-      Object[] titulo = {"*INGREDIENTES*","*PC*","*TND*"};
-      Object[][] info = {{"INGREDIENTES","%PC","%TND"}};
-      table = new JTable(info,titulo);
-      table.setForeground(new Color(1, 1, 1));
-      table.setBackground(new Color(255, 182, 193));
-      panelTabla.add(table);
-      panelTabla.updateUI();
-    }
-    if (numeroIng == 1) {
-      Object[] titulo = {"*INGREDIENTES*","*PC*","*TND*"};
-      Object[][] info = {{"INGREDIENTES","%PC","%TND"},
-        {ingSeleccionados.get(0).getNom_ing(),ingSeleccionados.get(0).getPro_cru(),
-        ingSeleccionados.get(0).getTnd()}};
-      table = new JTable(info,titulo);
-      table.setForeground(new Color(1, 1, 1));
-      table.setBackground(new Color(255, 182, 193));
-      panelTabla.add(table);
-      panelTabla.updateUI();
-    }
-    if (numeroIng == 2) {
-      Object[] titulo = {"*INGREDIENTES*","*PC*","*TND*"};
-      Object[][] info = {{"INGREDIENTES","%PC","%TND"},
-        {ingSeleccionados.get(0).getNom_ing(),ingSeleccionados.get(0).getPro_cru(),
-        ingSeleccionados.get(0).getTnd()},
-        {ingSeleccionados.get(1).getNom_ing(),ingSeleccionados.get(1).getPro_cru(),
-        ingSeleccionados.get(1).getTnd()}};
-      table = new JTable(info,titulo);
-      table.setForeground(new Color(1, 1, 1));
-      table.setBackground(new Color(255, 182, 193));
-      panelTabla.add(table);
-      panelTabla.updateUI();
-    }
-    if (numeroIng == 3) {
-      Object[] titulo = {"*INGREDIENTES*","*PC*","*TND*"};
-      Object[][] info = {{"INGREDIENTES","%PC","%TND"},
-        {ingSeleccionados.get(0).getNom_ing(),ingSeleccionados.get(0).getPro_cru(),
-        ingSeleccionados.get(0).getTnd()},
-        {ingSeleccionados.get(1).getNom_ing(),ingSeleccionados.get(1).getPro_cru(),
-        ingSeleccionados.get(1).getTnd()},
-        {ingSeleccionados.get(2).getNom_ing(),ingSeleccionados.get(2).getPro_cru(),
-        ingSeleccionados.get(2).getTnd()}};
-      table = new JTable(info,titulo);
-      table.setForeground(new Color(1, 1, 1));
-      table.setBackground(new Color(255, 182, 193));
-      panelTabla.add(table);
-      panelTabla.updateUI();
-    }
-    if (numeroIng == 4) {
-      Object[] titulo = {"*INGREDIENTES*","*PC*","*TND*"};
-      Object[][] info = {{"INGREDIENTES","%PC","%TND"},
-        {ingSeleccionados.get(0).getNom_ing(),ingSeleccionados.get(0).getPro_cru(),
-        ingSeleccionados.get(0).getTnd()},
-        {ingSeleccionados.get(1).getNom_ing(),ingSeleccionados.get(1).getPro_cru(),
-        ingSeleccionados.get(1).getTnd()},
-        {ingSeleccionados.get(2).getNom_ing(),ingSeleccionados.get(2).getPro_cru(),
-        ingSeleccionados.get(2).getTnd()},
-        {ingSeleccionados.get(3).getNom_ing(),ingSeleccionados.get(3).getPro_cru(),
-        ingSeleccionados.get(3).getTnd()}};
-      table = new JTable(info,titulo);
-      table.setForeground(new Color(1, 1, 1));
-      table.setBackground(new Color(255, 182, 193));
-      panelTabla.add(table);
-      panelTabla.updateUI();
-    }
-    if (numeroIng == 5) {
-      Object[] titulo = {"*INGREDIENTES*","*PC*","*TND*"};
-      Object[][] info = {{"INGREDIENTES","%PC","%TND"},
-        {ingSeleccionados.get(0).getNom_ing(),ingSeleccionados.get(0).getPro_cru(),
-        ingSeleccionados.get(0).getTnd()},
-        {ingSeleccionados.get(1).getNom_ing(),ingSeleccionados.get(1).getPro_cru(),
-        ingSeleccionados.get(1).getTnd()},
-        {ingSeleccionados.get(2).getNom_ing(),ingSeleccionados.get(2).getPro_cru(),
-        ingSeleccionados.get(2).getTnd()},
-        {ingSeleccionados.get(3).getNom_ing(),ingSeleccionados.get(3).getPro_cru(),
-        ingSeleccionados.get(3).getTnd()},
-        {ingSeleccionados.get(4).getNom_ing(),ingSeleccionados.get(4).getPro_cru(),
-        ingSeleccionados.get(4).getTnd()}};
-      table = new JTable(info,titulo);
-      table.setForeground(new Color(1, 1, 1));
-      table.setBackground(new Color(255, 182, 193));
-      panelTabla.add(table);
-      panelTabla.updateUI();
-    }
-    if (numeroIng == 6) {
-      Object[] titulo = {"*INGREDIENTES*","*PC*","*TND*"};
-      Object[][] info = {{"INGREDIENTES","%PC","%TND"},
-        {ingSeleccionados.get(0).getNom_ing(),ingSeleccionados.get(0).getPro_cru(),
-        ingSeleccionados.get(0).getTnd()},
-        {ingSeleccionados.get(1).getNom_ing(),ingSeleccionados.get(1).getPro_cru(),
-        ingSeleccionados.get(1).getTnd()},
-        {ingSeleccionados.get(2).getNom_ing(),ingSeleccionados.get(2).getPro_cru(),
-        ingSeleccionados.get(2).getTnd()},
-        {ingSeleccionados.get(3).getNom_ing(),ingSeleccionados.get(3).getPro_cru(),
-        ingSeleccionados.get(3).getTnd()},
-        {ingSeleccionados.get(4).getNom_ing(),ingSeleccionados.get(4).getPro_cru(),
-        ingSeleccionados.get(4).getTnd()},
-        {ingSeleccionados.get(5).getNom_ing(),ingSeleccionados.get(5).getPro_cru(),
-        ingSeleccionados.get(5).getTnd()}};
-      table = new JTable(info,titulo);
-      table.setForeground(new Color(1, 1, 1));
-      table.setBackground(new Color(255, 182, 193));
-      panelTabla.add(table);
-      panelTabla.updateUI();
-    }
+    panelTabla.setLayout(new GridLayout(0, 1, 0, 0));
+    TablaIngredientes table = new TablaIngredientes(ingSeleccionados,null);
+    panelTabla.add(table);
+    panelTabla.updateUI();
   }
   
   /**
-   * Agrega el contenido del las clasificaciones de los ingredientes
+   * Agrega las clasificaciones de los ingredientes
    * a partir de una lista de clasificaciones.
    */
   public void agregaCla() {

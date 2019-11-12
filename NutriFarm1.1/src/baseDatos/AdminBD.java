@@ -12,7 +12,7 @@ public class AdminBD {
    * @version 2.1 08/10/19
    */  
   public Connection obtenerConexion() {
-    String url = "jdbc:sqlite:C:\\SQLite\\nutrifarm";
+    String url = "jdbc:sqlite:/Users/mac/Documents/AsegDeLaCalidad/sqllite/sqlite-tools/nutrifarm";
     Connection conn = null;
     try {
       conn = DriverManager.getConnection(url);

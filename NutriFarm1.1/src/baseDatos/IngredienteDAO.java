@@ -9,4 +9,6 @@ public interface IngredienteDAO {
   
   public List<Ingrediente> obtenerIngredientes();
   
+  public int insertar(Ingrediente ing);
+  
 }

@@ -28,6 +28,7 @@ public class EligeAnimal extends JPanel {
   private JComboBox<String> comboPeso;
   private JComboBox<String> comboGanancia;
   private SeleccionaIngredientes seleccionaIngredientes;
+  private int cont = 0;
   
   /**
    * Constructor.
@@ -37,6 +38,9 @@ public class EligeAnimal extends JPanel {
     this.contentPane = contenedor;
     this.tarjetero = tarjetero;
     this.concentrado = new Mezcla();
+    AnimalDAOIMP animalesBD = new AnimalDAOIMP();
+    animales = animalesBD.obtenerAnimales();
+    
     setBackground(new Color(255, 192, 203));
     setBounds(100, 100, 330, 500);
     SpringLayout springLayout = new SpringLayout();
@@ -91,8 +95,8 @@ public class EligeAnimal extends JPanel {
         comboAnimales);
     springLayout.putConstraint(SpringLayout.EAST,comboEtapas,0,SpringLayout.EAST,
         comboAnimales);
-    add(comboEtapas);
     comboEtapas.addItem("-");
+    
 
     JLabel lblPeso = new JLabel("Peso:");
     springLayout.putConstraint(SpringLayout.NORTH, lblPeso, 40, SpringLayout.SOUTH, lblEtapa);
@@ -122,21 +126,39 @@ public class EligeAnimal extends JPanel {
     springLayout.putConstraint(SpringLayout.EAST, comboGanancia, -45, SpringLayout.EAST, this);
     add(comboGanancia);
     comboGanancia.addItem("-");
+    comboGanancia.addItem("5");
+    comboGanancia.addItem("10");
+    comboGanancia.addItem("15");
+    comboGanancia.addItem("20");
+    comboGanancia.addItem("25");
     comboGanancia.setEnabled(false);
    
     JButton btnSiguiente = new JButton("Siguiente");
-    springLayout.putConstraint(SpringLayout.NORTH, btnSiguiente, 60, SpringLayout.SOUTH, 
-        comboGanancia);
-    springLayout.putConstraint(SpringLayout.SOUTH, btnSiguiente, -52, SpringLayout.SOUTH, this);
+    springLayout.putConstraint(SpringLayout.WEST, btnSiguiente, 187, SpringLayout.WEST, this);
+    springLayout.putConstraint(SpringLayout.SOUTH, btnSiguiente, -53, SpringLayout.SOUTH, this);
+    springLayout.putConstraint(SpringLayout.EAST,btnSiguiente,0,SpringLayout.EAST,comboAnimales);
+    btnSiguiente.setBackground(new Color(230, 230, 250));
     btnSiguiente.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         validaDatos();
       }
     });
-    springLayout.putConstraint(SpringLayout.WEST, btnSiguiente, 122, SpringLayout.WEST, this);
-    springLayout.putConstraint(SpringLayout.EAST, btnSiguiente, -110, SpringLayout.EAST, this);
+  
+    add(comboEtapas);
     btnSiguiente.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
     add(btnSiguiente);
+    
+    JButton btnNewButton = new JButton("Regresar");
+    springLayout.putConstraint(SpringLayout.NORTH, btnNewButton,65,SpringLayout.SOUTH,lblGanancia);
+    springLayout.putConstraint(SpringLayout.SOUTH, btnNewButton, -53, SpringLayout.SOUTH, this);
+    springLayout.putConstraint(SpringLayout.NORTH, btnSiguiente,0,SpringLayout.NORTH,btnNewButton);
+    springLayout.putConstraint(SpringLayout.WEST, btnNewButton, 0, SpringLayout.WEST, lblEspecie);
+    btnNewButton.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        tarjetero.show(contentPane,"menu2");
+      }
+    });
+    add(btnNewButton);
     agregaEspecieComboBox();
   }
 
@@ -146,11 +168,17 @@ public class EligeAnimal extends JPanel {
   */
   public void validaDatos() {
     if (((String)comboPeso.getSelectedItem()).equals("-") 
-        || ((String)comboEtapas.getSelectedItem()).equals("-")) {
+        || ((String)comboEtapas.getSelectedItem()).equals("-") 
+        || (comboGanancia.isEnabled() && ((String)comboGanancia.getSelectedItem()).equals("-"))) {
 
       JOptionPane.showMessageDialog(null,"ERROR! *Faltan datos");
     } else {
       Animal nuevoA = new Animal();
+      if (((String)comboGanancia.getSelectedItem()).equals("-")) {
+        nuevoA.setGanancia(0); 
+      } else {
+        nuevoA.setGanancia(Integer.parseInt((String)comboGanancia.getSelectedItem()));
+      }
       nuevoA.setEspecie((String)comboAnimales.getSelectedItem());
       nuevoA.setEtapa_descrip((String)comboEtapas.getSelectedItem());
       nuevoA.setPeso_kg(Integer.parseInt((String)comboPeso.getSelectedItem()));
@@ -161,7 +189,6 @@ public class EligeAnimal extends JPanel {
       seleccionaIngredientes = new SeleccionaIngredientes(tarjetero,contentPane,concentrado);
       contentPane.add(seleccionaIngredientes,"seleccionaIngredientes4");
       tarjetero.show(contentPane,"seleccionaIngredientes4");
-      
     }
   }
   
@@ -170,8 +197,6 @@ public class EligeAnimal extends JPanel {
    */
   public void agregaEspecieComboBox() {
     comboAnimales.addItem("-");
-    AnimalDAOIMP animalesBD = new AnimalDAOIMP();
-    animales = animalesBD.obtenerAnimales();
     for (int i = 0;i < animales.size();i++) {
       int cont = 0;
       for (int j = 0;j < comboAnimales.getItemCount();j++) {
@@ -183,30 +208,33 @@ public class EligeAnimal extends JPanel {
         comboAnimales.addItem(animales.get(i).getEspecie());  
       }
     }
-    ActionListener ecomboesp = new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        if (comboAnimales.getSelectedItem().equals("-")) {
-          JOptionPane.showMessageDialog(null,"Error! *Elija un Animal -");
-          comboEtapas.removeAllItems();
-          comboEtapas.addItem("-");
-          comboPeso.removeAllItems();
-          comboPeso.addItem("-");
-        } else {
-          comboEtapas.removeAllItems();
-          comboEtapas.addItem("-");
-          comboPeso.removeAllItems();
-          comboPeso.addItem("-");
-          agregaEtapasCombo();
-          agregaPesoCombo();
+    if (cont == 0) {
+      ActionListener ecomboesp = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+          if (comboAnimales.getSelectedItem().equals("-")) {
+            JOptionPane.showMessageDialog(null,"Error! *Elija un Animal -");
+            comboEtapas.removeAllItems();;
+            comboEtapas.addItem("-");
+            comboPeso.removeAllItems();
+            comboPeso.addItem("-");
+          } else {
+            comboEtapas.removeAllItems();
+            comboEtapas.addItem("-");
+            comboPeso.removeAllItems();
+            comboPeso.addItem("-");
+            agregaEtapasCombo();
+            agregaPesoCombo();
+          }
         }
-      }
-    };
-    comboAnimales.addActionListener(ecomboesp);
+      };
+      comboAnimales.addActionListener(ecomboesp);
+    }
   }
   
   /**
-   * Ingresa al comboEtapas El nombre de la estapas del animal elegido. 
+   * Ingresa las estapas del animal elegido
+   * y el evento que habilita el comboGanancia. 
    */
   private void agregaEtapasCombo() {
     for (int i = 0;i < animales.size();i++) {
@@ -221,7 +249,19 @@ public class EligeAnimal extends JPanel {
           comboEtapas.addItem(animales.get(i).getEtapa_descrip());  
         }
       }
-    } 
+    }
+    ActionListener activaGanancia = new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        if (comboEtapas.getSelectedItem().equals("Crecimiento")) {
+          comboGanancia.setEnabled(true);
+        } else {
+          comboGanancia.setEnabled(false);
+          comboGanancia.setSelectedIndex(0);
+        }
+      }
+    };
+    comboEtapas.addActionListener(activaGanancia);
   }
   
   /**

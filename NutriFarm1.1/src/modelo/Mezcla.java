@@ -1,47 +1,16 @@
 package modelo;
 
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Mezcla {
-  private int num_mezcla;
-  private Date fecha;
-  private String nota;
+
   private List<Ingrediente> ingredientes;
   private Animal animal;
   private List<Cantidad> cantidadesIng;
 
-  public int getNum_mezcla() {
-	return num_mezcla;
-}
-
-public void setNum_mezcla(int num_mezcla) {
-	this.num_mezcla = num_mezcla;
-}
-
-public Date getFecha() {
-	return fecha;
-}
-
-public void setFecha(Date fecha) {
-	this.fecha = fecha;
-}
-
-public String getNota() {
-	return nota;
-}
-
-public void setNota(String nota) {
-	this.nota = nota;
-}
-
-public void setIngredientes(List<Ingrediente> ingredientes) {
-	this.ingredientes = ingredientes;
-}
-
-/**
-   * Contructor que recibe como parametros una lista de ingredientes y un animal.
+  /**
+   * Contructor que recive como parametros una lista de ingredientes y un animal.
    */
   public Mezcla(LinkedList<Ingrediente> ingredientes, Animal animal) {
     super();

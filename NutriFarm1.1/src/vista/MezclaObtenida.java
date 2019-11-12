@@ -11,8 +11,8 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTable;
 import javax.swing.SpringLayout;
+import javax.swing.SwingConstants;
 import modelo.Mezcla;
 
 public class MezclaObtenida extends JPanel {
@@ -23,7 +23,7 @@ public class MezclaObtenida extends JPanel {
   private CardLayout tarjetero;
   private JComboBox<String> comboBox;
   private Mezcla concentrado;
-  private JTable table;
+  private TablaIngredientes table;
   
   /**
    * Constructor.
@@ -62,6 +62,7 @@ public class MezclaObtenida extends JPanel {
     add(lblMezclaObtenida);
 
     JButton btnExpotar = new JButton("Expotar");
+    springLayout.putConstraint(SpringLayout.WEST, btnExpotar, 28, SpringLayout.WEST, this);
     btnExpotar.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         exporta();
@@ -70,9 +71,8 @@ public class MezclaObtenida extends JPanel {
     add(btnExpotar);
 
     comboBox = new JComboBox<String>();
-    springLayout.putConstraint(SpringLayout.WEST, comboBox, 28, SpringLayout.WEST, this);
-    springLayout.putConstraint(SpringLayout.SOUTH, comboBox, -17, SpringLayout.NORTH, btnExpotar);
-    springLayout.putConstraint(SpringLayout.WEST, btnExpotar, 0, SpringLayout.WEST, comboBox);
+    springLayout.putConstraint(SpringLayout.WEST, comboBox, 0, SpringLayout.WEST, btnExpotar);
+    springLayout.putConstraint(SpringLayout.SOUTH, comboBox, -6, SpringLayout.NORTH, btnExpotar);
     add(comboBox);
     comboBox.addItem("-");
     comboBox.addItem("JPG");
@@ -80,6 +80,7 @@ public class MezclaObtenida extends JPanel {
   
     JButton btnMenu = new JButton("Menu");
     springLayout.putConstraint(SpringLayout.SOUTH, btnMenu, -22, SpringLayout.SOUTH, this);
+    springLayout.putConstraint(SpringLayout.EAST, btnMenu, -34, SpringLayout.EAST, this);
     springLayout.putConstraint(SpringLayout.NORTH, btnExpotar, 0, SpringLayout.NORTH, btnMenu);
     btnMenu.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
@@ -89,47 +90,51 @@ public class MezclaObtenida extends JPanel {
     add(btnMenu);
 
     panelTabla = new JPanel();
-    springLayout.putConstraint(SpringLayout.SOUTH, panelTabla, -34, SpringLayout.NORTH, comboBox);
-    springLayout.putConstraint(SpringLayout.EAST, btnMenu, 0, SpringLayout.EAST, panelTabla);
+    springLayout.putConstraint(SpringLayout.WEST, panelTabla, -7, SpringLayout.WEST, btnExpotar);
+    springLayout.putConstraint(SpringLayout.SOUTH, panelTabla, -20, SpringLayout.NORTH, comboBox);
+    springLayout.putConstraint(SpringLayout.EAST, panelTabla, 307, SpringLayout.WEST, this);
     panelTabla.setBackground(new Color(255, 182, 193));
-    springLayout.putConstraint(SpringLayout.WEST, panelTabla, 28, SpringLayout.WEST, this);
-    springLayout.putConstraint(SpringLayout.EAST, panelTabla, 296, SpringLayout.WEST, this);
     add(panelTabla);
     panelTabla.setLayout(new CardLayout(0, 0));
 
     JPanel panel = new JPanel();
-    springLayout.putConstraint(SpringLayout.SOUTH, panel, -265, SpringLayout.SOUTH, this);
-    springLayout.putConstraint(SpringLayout.NORTH, panelTabla, 13, SpringLayout.SOUTH, panel);
-    panel.setBackground(new Color(255, 182, 193));
-    springLayout.putConstraint(SpringLayout.NORTH, panel, 31, SpringLayout.SOUTH,lblMezclaObtenida);
-    springLayout.putConstraint(SpringLayout.WEST, panel, 53, SpringLayout.WEST, this);
-    springLayout.putConstraint(SpringLayout.EAST, panel, 270, SpringLayout.WEST, this);
+    springLayout.putConstraint(SpringLayout.NORTH, panelTabla, 17, SpringLayout.SOUTH, panel);
+    springLayout.putConstraint(SpringLayout.WEST, panel, -16, SpringLayout.WEST, label);
+    springLayout.putConstraint(SpringLayout.EAST, panel, 196, SpringLayout.WEST, label);
+    springLayout.putConstraint(SpringLayout.NORTH, panel, 16, SpringLayout.SOUTH,lblMezclaObtenida);
+    springLayout.putConstraint(SpringLayout.SOUTH, panel, -291, SpringLayout.SOUTH, this);
+    panel.setBackground(new Color(255, 240, 245));
     add(panel);
     panel.setLayout(new GridLayout(0, 2, 0, 0));
 
-    JLabel lblNombre = new JLabel("Especie:");
+    JLabel lblNombre = new JLabel("Especie:  ");
+    lblNombre.setHorizontalAlignment(SwingConstants.RIGHT);
+    lblNombre.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
     panel.add(lblNombre);
 
     JLabel esp = new JLabel(concentrado.getAnimal().getEspecie());
     panel.add(esp);
   
-    JLabel lblNewLabel2 = new JLabel("Etapa:");
+    JLabel lblNewLabel2 = new JLabel("Etapa:  ");
+    lblNewLabel2.setHorizontalAlignment(SwingConstants.RIGHT);
     lblNewLabel2.setToolTipText("");
     panel.add(lblNewLabel2);
   
     JLabel etapa = new JLabel(concentrado.getAnimal().getEtapa_descrip());
     panel.add(etapa);
    
-    JLabel lblNewLabel4 = new JLabel("Peso:");
+    JLabel lblNewLabel4 = new JLabel("Peso:  ");
+    lblNewLabel4.setHorizontalAlignment(SwingConstants.RIGHT);
     panel.add(lblNewLabel4);
 
-    JLabel peso = new JLabel("" + concentrado.getAnimal().getPeso_kg());
+    JLabel peso = new JLabel("" + concentrado.getAnimal().getPeso_kg() + "Kg");
     panel.add(peso);
 
-    JLabel lblNewLabel3 = new JLabel("Ganancia:");
+    JLabel lblNewLabel3 = new JLabel("Ganancia:  ");
+    lblNewLabel3.setHorizontalAlignment(SwingConstants.RIGHT);
     panel.add(lblNewLabel3);
 
-    JLabel gana = new JLabel("" + 10);
+    JLabel gana = new JLabel("" + concentrado.getAnimal().getGanancia() + "Kg");
     panel.add(gana);
     muestraTabla();
   }
@@ -140,154 +145,10 @@ public class MezclaObtenida extends JPanel {
    */
   public void muestraTabla() {
     panelTabla.removeAll();
-    int numeroIng = concentrado.getIngredientes().size();
-    if (numeroIng == 0) {
-      Object[] titulo = {"*INGREDIENTES*","*PC*","*TND*","*CAN*"};
-      Object[][] info = {{"ING","%PC","%TND","%CAN"}};
-      table = new JTable(info,titulo);
-      table.setForeground(new Color(1, 1, 1));
-      table.setBackground(new Color(255, 182, 193));
-      panelTabla.add(table);
-      panelTabla.updateUI();
-    }
-    if (numeroIng == 1) {
-      Object[] titulo = {"*INGREDIENTES*","*PC*","*TND*","*CAN*"};
-      Object[][] info = {{"ING","%PC","%TND","%CAN"},
-        {concentrado.getIngredientes().get(0).getNom_ing(),
-        concentrado.getIngredientes().get(0).getPro_cru(),
-        concentrado.getIngredientes().get(0).getTnd(),
-        concentrado.getCantidadesIng().get(0).getPorcent()}};
-      table = new JTable(info,titulo);
-      table.setForeground(new Color(1, 1, 1));
-      table.setBackground(new Color(255, 182, 193));
-      panelTabla.add(table);
-      panelTabla.updateUI();
-    }
-    if (numeroIng == 2) {
-      Object[] titulo = {"*INGREDIENTES*","*PC*","*TND*","*CAN*"};
-      Object[][] info = {{"ING","%PC","%TND","%CAN"},
-          {concentrado.getIngredientes().get(0).getNom_ing(),
-          concentrado.getIngredientes().get(0).getPro_cru(),
-          concentrado.getIngredientes().get(0).getTnd(),
-          concentrado.getCantidadesIng().get(0).getPorcent()},
-          {concentrado.getIngredientes().get(1).getNom_ing(),
-          concentrado.getIngredientes().get(1).getPro_cru(),
-          concentrado.getIngredientes().get(1).getTnd(),
-          concentrado.getCantidadesIng().get(1).getPorcent()}};
-      table = new JTable(info,titulo);
-      table.setForeground(new Color(1, 1, 1));
-      table.setBackground(new Color(255, 182, 193));
-      panelTabla.add(table);
-      panelTabla.updateUI();
-    }
-    if (numeroIng == 3) {
-      Object[] titulo = {"*INGREDIENTES*","*PC*","*TND*","*CAN*"};
-      Object[][] info = {{"ING","%PC","%TND","%CAN"},
-          {concentrado.getIngredientes().get(0).getNom_ing(),
-          concentrado.getIngredientes().get(0).getPro_cru(),
-          concentrado.getIngredientes().get(0).getTnd(),
-          concentrado.getCantidadesIng().get(0).getPorcent()},
-          {concentrado.getIngredientes().get(1).getNom_ing(),
-          concentrado.getIngredientes().get(1).getPro_cru(),
-          concentrado.getIngredientes().get(1).getTnd(),
-          concentrado.getCantidadesIng().get(1).getPorcent()},
-          {concentrado.getIngredientes().get(2).getNom_ing(),
-          concentrado.getIngredientes().get(2).getPro_cru(),
-          concentrado.getIngredientes().get(2).getTnd(),
-          concentrado.getCantidadesIng().get(2).getPorcent()}};
-      table = new JTable(info,titulo);
-      table.setForeground(new Color(1, 1, 1));
-      table.setBackground(new Color(255, 182, 193));
-      panelTabla.add(table);
-      panelTabla.updateUI();
-    }
-    if (numeroIng == 4) {
-      Object[] titulo = {"*INGREDIENTES*","*PC*","*TND*","*CAN*"};
-      Object[][] info = {{"ING","%PC","%TND","%CAN"},
-          {concentrado.getIngredientes().get(0).getNom_ing(),
-          concentrado.getIngredientes().get(0).getPro_cru(),
-          concentrado.getIngredientes().get(0).getTnd(),
-          concentrado.getCantidadesIng().get(0).getPorcent()},
-          {concentrado.getIngredientes().get(1).getNom_ing(),
-          concentrado.getIngredientes().get(1).getPro_cru(),
-          concentrado.getIngredientes().get(1).getTnd(),
-          concentrado.getCantidadesIng().get(1).getPorcent()},
-          {concentrado.getIngredientes().get(2).getNom_ing(),
-          concentrado.getIngredientes().get(2).getPro_cru(),
-          concentrado.getIngredientes().get(2).getTnd(),
-          concentrado.getCantidadesIng().get(2).getPorcent()},
-          {concentrado.getIngredientes().get(3).getNom_ing(),
-          concentrado.getIngredientes().get(3).getPro_cru(),
-          concentrado.getIngredientes().get(3).getTnd(),
-          concentrado.getCantidadesIng().get(3).getPorcent()}};
-      table = new JTable(info,titulo);
-      table.setForeground(new Color(1, 1, 1));
-      table.setBackground(new Color(255, 182, 193));
-      panelTabla.add(table);
-      panelTabla.updateUI();
-    }
-    if (numeroIng == 5) {
-      Object[] titulo = {"*INGREDIENTES*","*PC*","*TND*","*CAN*"};
-      Object[][] info = {{"ING","%PC","%TND","%CAN"},
-          {concentrado.getIngredientes().get(0).getNom_ing(),
-          concentrado.getIngredientes().get(0).getPro_cru(),
-          concentrado.getIngredientes().get(0).getTnd(),
-          concentrado.getCantidadesIng().get(0).getPorcent()},
-          {concentrado.getIngredientes().get(1).getNom_ing(),
-          concentrado.getIngredientes().get(1).getPro_cru(),
-          concentrado.getIngredientes().get(1).getTnd(),
-          concentrado.getCantidadesIng().get(1).getPorcent()},
-          {concentrado.getIngredientes().get(2).getNom_ing(),
-          concentrado.getIngredientes().get(2).getPro_cru(),
-          concentrado.getIngredientes().get(2).getTnd(),
-          concentrado.getCantidadesIng().get(2).getPorcent()},
-          {concentrado.getIngredientes().get(3).getNom_ing(),
-          concentrado.getIngredientes().get(3).getPro_cru(),
-          concentrado.getIngredientes().get(3).getTnd(),
-          concentrado.getCantidadesIng().get(3).getPorcent()},
-          {concentrado.getIngredientes().get(4).getNom_ing(),
-          concentrado.getIngredientes().get(4).getPro_cru(),
-          concentrado.getIngredientes().get(4).getTnd(),
-          concentrado.getCantidadesIng().get(4).getPorcent()}};
-      table = new JTable(info,titulo);
-      table.setForeground(new Color(1, 1, 1));
-      table.setBackground(new Color(255, 182, 193));
-      panelTabla.add(table);
-      panelTabla.updateUI();
-    }
-    if (numeroIng == 6) {
-      Object[] titulo = {"*INGREDIENTES*","*PC*","*TND*","*CAN*"};
-      Object[][] info = {{"ING","%PC","%TND","%CAN"},
-          {concentrado.getIngredientes().get(0).getNom_ing(),
-          concentrado.getIngredientes().get(0).getPro_cru(),
-          concentrado.getIngredientes().get(0).getTnd(),
-          concentrado.getCantidadesIng().get(0).getPorcent()},
-          {concentrado.getIngredientes().get(1).getNom_ing(),
-          concentrado.getIngredientes().get(1).getPro_cru(),
-          concentrado.getIngredientes().get(1).getTnd(),
-          concentrado.getCantidadesIng().get(1).getPorcent()},
-          {concentrado.getIngredientes().get(2).getNom_ing(),
-          concentrado.getIngredientes().get(2).getPro_cru(),
-          concentrado.getIngredientes().get(2).getTnd(),
-          concentrado.getCantidadesIng().get(0).getPorcent()},
-          {concentrado.getIngredientes().get(3).getNom_ing(),
-          concentrado.getIngredientes().get(3).getPro_cru(),
-          concentrado.getIngredientes().get(3).getTnd(),
-          concentrado.getCantidadesIng().get(3).getPorcent()},
-          {concentrado.getIngredientes().get(4).getNom_ing(),
-          concentrado.getIngredientes().get(4).getPro_cru(),
-          concentrado.getIngredientes().get(4).getTnd(),
-          concentrado.getCantidadesIng().get(4).getPorcent()},
-          {concentrado.getIngredientes().get(5).getNom_ing(),
-          concentrado.getIngredientes().get(5).getPro_cru(),
-          concentrado.getIngredientes().get(5).getTnd(),
-          concentrado.getCantidadesIng().get(5).getPorcent()}};
-      table = new JTable(info,titulo);
-      table.setForeground(new Color(1, 1, 1));
-      table.setBackground(new Color(255, 182, 193));
-      panelTabla.add(table);
-      panelTabla.updateUI();
-    }
+    panelTabla.setLayout(new GridLayout(0, 1, 0, 0));
+    table = new TablaIngredientes(null,concentrado);
+    panelTabla.add(table, "name_20165854941381");
+    panelTabla.updateUI();
   }
   
   /**

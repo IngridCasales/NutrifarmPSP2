@@ -54,5 +54,40 @@ public class IngredienteDAOIMP implements IngredienteDAO {
     }
     return lista;
   }
+  
+  @Override
+  public int insertar(Ingrediente ing) {
+    int cont = 0;
+    String sql = "INSERT INTO ingredientes("
+        + "nom_ing,mat_sec,pro_cru,fib_cru,ca,p,mg,em,tnd,clasificacion_tipo)"
+        + " VALUES(?,?,?,?,?,?,?,?,?,?)";
+    PreparedStatement ps = null;
+    try {
+      conexion = admin.obtenerConexion();
+      conexion.setAutoCommit(false);
+      ps = conexion.prepareStatement(sql);
+      ps.setString(1,ing.getNom_ing());
+      ps.setDouble(2,ing.getMat_sec());
+      ps.setDouble(3,ing.getPro_cru());
+      ps.setDouble(4,ing.getFib_cru());
+      ps.setDouble(5,ing.getCa());
+      ps.setDouble(6,ing.getP());
+      ps.setDouble(7,ing.getMg());
+      ps.setDouble(8,ing.getEm());
+      ps.setDouble(9,ing.getTnd());
+      ps.setString(10,ing.getClasificacion_tipo());
+      cont = ps.executeUpdate();
+      if (cont == 1) {
+        conexion.commit();
+      } else {
+        conexion.rollback();
+      }
+      ps.close();
+      conexion.close();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return cont;
+  }
 
 }
