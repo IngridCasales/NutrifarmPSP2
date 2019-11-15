@@ -1,0 +1,401 @@
+package modelo;
+
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+
+public class Mezcla {
+	private int num_mezcla;
+	private Date fecha;
+	private String nota;
+	private List<Ingrediente> ingredientes;
+	private Animal animal;
+	private List<Cantidad> cantidadesIng;
+	public static int contador = 0;
+
+	public int getNum_mezcla() {
+		return num_mezcla;
+	}
+
+	public void setNum_mezcla(int num_mezcla) {
+		this.num_mezcla = num_mezcla;
+	}
+
+	public Date getFecha() {
+		return fecha;
+	}
+
+	public void setFecha(Date fecha) {
+		this.fecha = fecha;
+	}
+
+	public String getNota() {
+		return nota;
+	}
+
+	public void setNota(String nota) {
+		this.nota = nota;
+	}
+
+	public List<Ingrediente> getIngredientes() {
+		return ingredientes;
+	}
+
+	public void setIngredientes(List<Ingrediente> ingredientes) {
+		this.ingredientes = ingredientes;
+	}
+
+	public Animal getAnimal() {
+		return animal;
+	}
+
+	public void setAnimal(Animal animal) {
+		this.animal = animal;
+	}
+
+	public List<Cantidad> getCantidadesIng() {
+		return cantidadesIng;
+	}
+
+	public void setCantidadesIng(List<Cantidad> cantidadesIng) {
+		this.cantidadesIng = cantidadesIng;
+	}
+	
+	public double sumaVoluminosos(LinkedList<Ingrediente> ingre, List<Double> porcentajes) {
+		double porcentaje = 0.0;
+		int i = 0;
+		
+		for (i = 0;i < ingre.size();i++) {
+			if(ingre.get(i).getClasificacion_tipo().equalsIgnoreCase("voluminoso")) {
+				porcentaje += porcentajes.get(i);
+			}
+		}
+		return porcentaje;
+	}
+	
+	public List<Double> crearPorcentajeInicial(List<Ingrediente> ingredientes) {
+		  double pInicial = 100 / ingredientes.size();
+		  List<Double> porcentajes = new ArrayList<Double> ();
+		  for (int i  = 0; i < ingredientes.size(); i++) {
+			  porcentajes.add(pInicial);
+		  }
+		  return porcentajes;
+		  
+	  }
+	/** Busca al  ingrediente con mayor contenido de pc. **/
+	  public int buscaMayorPc(LinkedList<Ingrediente> ingre, List<Double> porcentajes) {
+	    int i = 0;
+	    int mayor = 0;
+	    for (i = 1;i < ingre.size();i++) {
+	      if (ingre.get(i).getPro_cru() > ingre.get(mayor).getPro_cru()) {
+	        if (ingre.get(i).getClasificacion_tipo().equalsIgnoreCase("voluminoso")) {
+	        	if (sumaVoluminosos(ingre, porcentajes) >= 90) {
+	        		break;
+	        	} else {
+	        		mayor = i;
+	        	}
+	        } else {
+	          mayor = i;
+	        }
+	      }
+	    }
+	    return mayor;
+	  }
+	  
+	  /** Busca al  ingrediente con menor contenido de pc. **/  
+	  public int buscaMenorPc(LinkedList<Ingrediente> ingredientes, List<Double> porcentajes) {
+	    int i = 0;
+	    int menor = 0;
+	    for (i = 1;i < ingredientes.size();i++) {
+	      if (ingredientes.get(i).getPro_cru() < ingredientes.get(menor).getPro_cru()) {
+	        if (ingredientes.get(i).getClasificacion_tipo().equalsIgnoreCase("voluminoso")) {
+	        	if (sumaVoluminosos(ingredientes, porcentajes) >= 90) {
+	        		break;
+	        	} else {
+	        		menor = i;
+	        	}
+	        } else {
+	          menor = i;
+	        }
+	      }
+	    }
+	    return menor;
+	  }
+	  
+	  
+	  
+	  /** Busca al  ingrediente con mayor contenido de em. **/
+	  public int buscaMayorEm(LinkedList<Ingrediente> ingredientes, List<Double> porcentajes) { 
+	    int i = 0;
+	    int mayor = 0;
+	    for (i = 1;i < ingredientes.size();i++) {
+	      if (ingredientes.get(i).getEm() > ingredientes.get(mayor).getEm()) {
+	    	  if (ingredientes.get(i).getClasificacion_tipo().equalsIgnoreCase("voluminoso")) {
+	    		  if (sumaVoluminosos(ingredientes, porcentajes) >= 90) {
+		        		break;
+		        	} else {
+		        		mayor = i;
+		        	}
+	            } else {
+	               mayor = i;
+	            }
+	      }
+	    }
+	    return mayor;
+	  }
+	  
+	  /** Busca al  ingrediente con menor contenido de em. **/
+	  public int buscaMenorEm(LinkedList<Ingrediente> ingredientes, List<Double> porcentajes) {
+	    int i = 0; 
+	    int menor = 0;
+	    for (i = 1;i < ingredientes.size();i++) {
+	      if (ingredientes.get(i).getEm() < ingredientes.get(menor).getEm()) {
+	        if (ingredientes.get(i).getClasificacion_tipo().equalsIgnoreCase("voluminoso")) {
+	        	if (sumaVoluminosos(ingredientes, porcentajes) >= 90) {
+	        		break;
+	        	} else {
+	        		menor = i;
+	        	}
+	        } else {
+	          menor = i;
+	        }
+	      }
+	    }
+	    return menor;
+	  }
+	  
+	  /** Busca al  ingrediente con mayor contenido de tnd. **/
+	  public int buscaMayorTnd(LinkedList<Ingrediente> ingredientes, List<Double> porcentajes) {
+	    int i = 0;
+	    int mayor = 0;
+	    for (i = 1;i < ingredientes.size();i++) {
+	      if (ingredientes.get(i).getEm() > ingredientes.get(mayor).getEm()) {
+	        if (ingredientes.get(i).getClasificacion_tipo().equalsIgnoreCase("voluminoso")) {
+	        	if (sumaVoluminosos(ingredientes, porcentajes) >= 90) {
+	        		break;
+	        	} else {
+	        		mayor = i;
+	        	}
+	        } else {
+	        	mayor = i;
+	        }
+	      }
+	    }
+	    return mayor;
+	  }
+	  
+	  /** Busca al  ingrediente con menor contenido de tnd. **/
+	  public int buscaMenorTnd(LinkedList<Ingrediente> ingredientes, List<Double> porcentajes) {
+	    int i = 0;
+	    int menor = 0;
+	    for (i = 1;i < ingredientes.size();i++) {
+	      if (ingredientes.get(i).getTnd() < ingredientes.get(menor).getTnd()) {
+	        if (ingredientes.get(i).getClasificacion_tipo().equalsIgnoreCase("voluminoso")) {
+	        	if (sumaVoluminosos(ingredientes, porcentajes) >= 90) {
+	        		break;
+	        	} else {
+	        		menor = i;
+	        	}
+	        } else {
+	          menor = i;
+	        }
+	      }
+	    }
+	    return menor;
+	  }
+	  
+	  public List<Double> balancearPc(LinkedList<Ingrediente> ingres, Animal a, List<Double> porcentajes) {
+		  int menor = 0;
+		  int mayor = 0;
+		  int i = 0;
+		  int vuelta = 0;
+		  double pc = 0;
+		  Boolean listo = false;
+		  double total = ingres.size();
+		  
+		  Mezcla m = new Mezcla();
+		  do {
+			  for (i = 0;i < total;i++) {
+			        pc = pc + ((porcentajes.get(i) * ingres.get(i).getPro_cru()) / 100);
+			      }
+			  if (pc < a.getPro_cru()) {
+				  mayor = m.buscaMayorPc(ingres,porcentajes);;
+				  menor = m.buscaMenorPc(ingres,porcentajes);;
+				  if ((porcentajes.get(mayor) > 10 && porcentajes.get(mayor) < 50)
+						  || (porcentajes.get(menor) > 10 && porcentajes.get(menor) < 50)) {
+					  porcentajes.set(mayor, porcentajes.get(mayor) + 2);
+					  porcentajes.set(menor, porcentajes.get(menor) - 2);
+				  }
+				  
+				  
+			  } else {
+				  if ( pc > (a.getPro_cru() +2)) {
+					  mayor = m.buscaMayorPc(ingres,porcentajes);;
+					  menor = m.buscaMenorPc(ingres,porcentajes);;
+					  if ((porcentajes.get(mayor) > 10 && porcentajes.get(mayor) < 50)
+							  || (porcentajes.get(menor) > 10 && porcentajes.get(menor) < 50)) {
+						  porcentajes.set(mayor, porcentajes.get(mayor) - 2);
+						  porcentajes.set(menor, porcentajes.get(menor) + 2);
+					  }
+					  
+				  } else {
+					  listo = true;
+				  }
+			  }
+			vuelta++;
+		  } while (listo || vuelta <= 50);  
+		  
+	    return porcentajes;
+	  }
+	  public List<Double> balancearEm (LinkedList<Ingrediente> ingres, Animal a, List<Double> porcentajes) {
+		  int menor = 0;
+		  int mayor = 0;
+		  int i = 0;
+		  int vuelta = 0;
+		  double em = 0;
+		  Boolean listo = false;
+		  double total = ingres.size();
+		  
+		  Mezcla m = new Mezcla();
+		  do {
+			  for (i = 0;i < total;i++) {
+			        em = em + ((porcentajes.get(i) * ingres.get(i).getPro_cru()) / 100);
+			      }
+			  if (em < a.getEm()) {
+				  mayor = m.buscaMayorEm(ingres,porcentajes);;
+				  menor = m.buscaMenorEm(ingres,porcentajes);;
+				  if ((porcentajes.get(mayor) > 10 && porcentajes.get(mayor) < 50)
+						  || (porcentajes.get(menor) > 10 && porcentajes.get(menor) < 50)) {
+					  porcentajes.set(mayor, porcentajes.get(mayor) + 2);
+					  porcentajes.set(menor, porcentajes.get(menor) - 2);
+				  }  
+				  
+			  } else {
+				  if ( em > (a.getEm() +2)) {
+					  mayor = m.buscaMayorEm(ingres,porcentajes);;
+					  menor = m.buscaMenorEm(ingres,porcentajes);
+					  if ((porcentajes.get(mayor) > 10 && porcentajes.get(mayor) < 50)
+							  || (porcentajes.get(menor) > 10 && porcentajes.get(menor) < 50)) {
+						  porcentajes.set(mayor, porcentajes.get(mayor) - 2);
+						  porcentajes.set(menor, porcentajes.get(menor) + 2);
+					  }
+					  
+				  } else {
+					  listo = true;
+				  }
+			  }
+			vuelta++;
+		  } while (listo || vuelta <= 50);
+
+	    return porcentajes;
+	  }
+	  
+	  public List<Double> balancearTnd(LinkedList<Ingrediente> ingres, Animal a, List<Double> porcentajes) {
+		  int menor = 0;
+		  int mayor = 0;
+		  int i = 0;
+		  int vuelta = 0;
+		  double tnd = 0;
+		  Boolean listo = false;
+		  double total = ingres.size();
+		  
+		  Mezcla m = new Mezcla();
+		  do {
+			  for (i = 0;i < total;i++) {
+			        tnd = tnd + ((porcentajes.get(i) * ingres.get(i).getPro_cru()) / 100);
+			      }
+			  if (tnd < a.getTnd()) {
+				  mayor = m.buscaMayorTnd(ingres,porcentajes);
+				  menor = m.buscaMenorTnd(ingres,porcentajes);
+				  if ((porcentajes.get(mayor) > 10 && porcentajes.get(mayor) < 50)
+						  || (porcentajes.get(menor) > 10 && porcentajes.get(menor) < 50)) {
+					  porcentajes.set(mayor, porcentajes.get(mayor) + 2);
+					  porcentajes.set(menor, porcentajes.get(menor) - 2);
+				  }
+				  
+				  
+			  } else {
+				  if ( tnd > (a.getTnd() + 2)) {
+					  mayor = m.buscaMayorTnd(ingres,porcentajes);
+					  menor = m.buscaMenorTnd(ingres,porcentajes);
+					  if ((porcentajes.get(mayor) > 10 && porcentajes.get(mayor) < 50)
+							  || (porcentajes.get(menor) > 10 && porcentajes.get(menor) < 50)) {
+						  porcentajes.set(mayor, porcentajes.get(mayor) - 2);
+						  porcentajes.set(menor, porcentajes.get(menor) + 2);
+					  }
+					  
+				  } else {
+					  listo = true;
+				  }
+			  }
+			vuelta++;
+		  } while (listo || vuelta <= 25);
+
+	    return porcentajes;
+	  }
+	  
+	  public List<Double> balancear(LinkedList<Ingrediente> ingSeleccionados, Animal animal, List<Double> porcentajes) {
+		    Mezcla m = new Mezcla();
+		    int i = 0;
+		    int total = ingSeleccionados.size();
+		    double pc = 0;
+		    double em = 0;
+		    double tnd = 0;
+		    contador++;
+		    if (contador <= 200) {
+		      porcentajes = m.balancearPc(ingSeleccionados, animal, porcentajes);
+		      for (i = 0;i < total;i++) {
+		        pc = pc + ((porcentajes.get(i) * ingSeleccionados.get(i).getPro_cru()) / 100);
+		      }
+		      if (pc < animal.getPro_cru() || pc > (animal.getPro_cru() + 2)) {
+		        	m.balancear(ingSeleccionados, animal, porcentajes);
+		        } else {
+		        	 porcentajes = m.balancearEm(ingSeleccionados, animal, porcentajes);
+		             for (i = 0;i < total;i++) {
+		            	 pc = pc + ((porcentajes.get(i) * ingSeleccionados.get(i).getPro_cru()) / 100);
+		                 em = em + ((porcentajes.get(i) * ingSeleccionados.get(i).getPro_cru()) / 100);
+		               }
+		             if ((pc < animal.getPro_cru() || pc > (animal.getPro_cru() + 2)) 
+		            		 || em < animal.getEm() || em > (animal.getEm() + 2)) {
+		            	 m.balancear(ingSeleccionados, animal, porcentajes);       	 
+		             } else {
+		            	 porcentajes = m.balancearTnd(ingSeleccionados, animal, porcentajes);
+		                 for (i = 0;i < total;i++) {
+		                	 pc = pc + ((porcentajes.get(i) * ingSeleccionados.get(i).getPro_cru()) / 100);
+		                     em = em + ((porcentajes.get(i) * ingSeleccionados.get(i).getEm()) / 100);
+		                     tnd = tnd + ((porcentajes.get(i) * ingSeleccionados.get(i).getTnd()) / 100);
+		                 }
+		                 if ((pc < animal.getPro_cru() || pc > (animal.getPro_cru()) + 2) 
+		                		 || em < animal.getEm() || em > (animal.getEm() + 2)
+		                		 || tnd < animal.getTnd() || tnd > (animal.getTnd() + 2)) {
+		                	 m.balancear(ingSeleccionados, animal, porcentajes);
+		                 }
+		             }
+		        }
+		    	
+		    }
+		    
+		    return porcentajes;
+			  
+		  }
+	  
+	  public void preparaMezcla(Animal animal, List<Cantidad> cantidades, LinkedList<Ingrediente> ingredientes) {
+		  
+		  Date date= new Date();
+		  
+		  long time = date.getTime();
+		  Timestamp ts = new Timestamp(time);
+		  this.animal = animal;
+		  cantidadesIng = cantidades;
+		  fecha = ts;
+		  nota = "creada en la aplicación NutriFarm el día" + ts ;
+		  this.ingredientes = ingredientes;
+		  
+
+		  
+	  }
+
+
+}
